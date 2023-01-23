@@ -1,0 +1,5 @@
+public struct NDJSON {
+  public private(set) var text = "Hello, World!"
+
+  public init() {}
+}

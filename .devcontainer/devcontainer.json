@@ -1,0 +1,11 @@
+{
+  "name": "swift-ndjson",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+  "extensions": [
+    "sswg.swift-lang",
+    "vknabel.vscode-swiftformat"
+  ]
+}
