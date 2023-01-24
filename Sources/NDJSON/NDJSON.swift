@@ -6,23 +6,83 @@ public enum StreamError: Error {
 }
 
 public class NDJSONEncoder {
+  public typealias KeyEncodingStrategy = JSONEncoder.KeyEncodingStrategy
+  public typealias DateEncodingStrategy = JSONEncoder.DateEncodingStrategy
+  public typealias DataEncodingStrategy = JSONEncoder.DataEncodingStrategy
+  public typealias NonConformingFloatEncodingStrategy = JSONEncoder.NonConformingFloatEncodingStrategy
+
+  public var keyEncodingStrategy: KeyEncodingStrategy {
+    get { encoder.keyEncodingStrategy }
+    set { encoder.keyEncodingStrategy = newValue }
+  }
+
+  public var userInfo: [CodingUserInfoKey: Any] {
+    get { encoder.userInfo }
+    set { encoder.userInfo = newValue }
+  }
+
+  public var dateEncodingStrategy: DateEncodingStrategy {
+    get { encoder.dateEncodingStrategy }
+    set { encoder.dateEncodingStrategy = newValue }
+  }
+
+  public var dataEncodingStrategy: DataEncodingStrategy {
+    get { encoder.dataEncodingStrategy }
+    set { encoder.dataEncodingStrategy = newValue }
+  }
+
+  public var nonConformingFloatEncodingStrategy: NonConformingFloatEncodingStrategy {
+    get { encoder.nonConformingFloatEncodingStrategy }
+    set { encoder.nonConformingFloatEncodingStrategy = newValue }
+  }
+
+  private let encoder: JSONEncoder = .init()
+
   public init() {}
 
   public func encode<S>(_ sequence: S) throws -> Data where S: Sequence, S.Element: Encodable {
-    let encoder = JSONEncoder()
-
     return Data(try sequence.map { try encoder.encode($0) }.joined(separator: [.newline]))
   }
 }
 
 public class NDJSONDecoder {
+  public typealias KeyDecodingStrategy = JSONDecoder.KeyDecodingStrategy
+  public typealias DateDecodingStrategy = JSONDecoder.DateDecodingStrategy
+  public typealias DataDecodingStrategy = JSONDecoder.DataDecodingStrategy
+  public typealias NonConformingFloatDecodingStrategy = JSONDecoder.NonConformingFloatDecodingStrategy
+
+  public var keyDecodingStrategy: KeyDecodingStrategy {
+    get { decoder.keyDecodingStrategy }
+    set { decoder.keyDecodingStrategy = newValue }
+  }
+
+  public var userInfo: [CodingUserInfoKey: Any] {
+    get { decoder.userInfo }
+    set { decoder.userInfo = newValue }
+  }
+
+  public var dateDecodingStrategy: DateDecodingStrategy {
+    get { decoder.dateDecodingStrategy }
+    set { decoder.dateDecodingStrategy = newValue }
+  }
+
+  public var dataDecodingStrategy: DataDecodingStrategy {
+    get { decoder.dataDecodingStrategy }
+    set { decoder.dataDecodingStrategy = newValue }
+  }
+
+  public var nonConformingFloatDecodingStrategy: NonConformingFloatDecodingStrategy {
+    get { decoder.nonConformingFloatDecodingStrategy }
+    set { decoder.nonConformingFloatDecodingStrategy = newValue }
+  }
+
   let readBufferSize: Int = 1024
+
+  private let decoder: JSONDecoder = .init()
 
   public init() {}
 
   public func decode<T>(_ type: T.Type, from data: Data) throws -> [T] where T: Decodable {
-    let decoder = JSONDecoder()
-
     return try data
       .split(separator: .newline)
       .map { try decoder.decode(type, from: $0) }
@@ -30,8 +90,6 @@ public class NDJSONDecoder {
 
   @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0,*)
   public func stream<T>(_ type: T.Type, from stream: InputStream) -> AsyncThrowingStream<T, Error> where T: Decodable {
-    let decoder = JSONDecoder()
-
     return AsyncThrowingStream { continuation in
       if stream.streamStatus == .notOpen {
         stream.open()
