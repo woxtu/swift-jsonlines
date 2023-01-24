@@ -5,6 +5,16 @@ public enum StreamError: Error {
   case noBytesAvailable
 }
 
+public class NDJSONEncoder {
+  public init() {}
+
+  public func encode<S>(_ sequence: S) throws -> Data where S: Sequence, S.Element: Encodable {
+    let encoder = JSONEncoder()
+
+    return Data(try sequence.map { try encoder.encode($0) }.joined(separator: [.newline]))
+  }
+}
+
 public class NDJSONDecoder {
   let readBufferSize: Int = 1024
 

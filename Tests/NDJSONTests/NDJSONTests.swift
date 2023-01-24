@@ -1,6 +1,20 @@
 @testable import NDJSON
 import XCTest
 
+final class NDJSONEncoderTests: XCTestCase {
+  func testEncodeValues() throws {
+    let encoder = NDJSONEncoder()
+    XCTAssertEqual(
+      try encoder.encode([0, 1, 2]),
+      """
+      0
+      1
+      2
+      """.data(using: .utf8)!
+    )
+  }
+}
+
 final class NDJSONDecoderTests: XCTestCase {
   func testDecodeValues() throws {
     let decoder = NDJSONDecoder()
