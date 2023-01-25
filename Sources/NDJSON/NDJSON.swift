@@ -76,7 +76,16 @@ public class NDJSONDecoder {
     set { decoder.nonConformingFloatDecodingStrategy = newValue }
   }
 
+  public var ignoreEmptyLines: Bool = false
+
   let readBufferSize: Int = 1024
+
+  let whitespaces: Set<UInt8> = [
+    .horizontalTab,
+    .newline,
+    .carriageReturn,
+    .space,
+  ]
 
   private let decoder: JSONDecoder = .init()
 
@@ -84,7 +93,8 @@ public class NDJSONDecoder {
 
   public func decode<T>(_ type: T.Type, from data: Data) throws -> [T] where T: Decodable {
     return try data
-      .split(separator: .newline)
+      .split(separator: .newline, omittingEmptySubsequences: ignoreEmptyLines)
+      .filter { data in !ignoreEmptyLines || !data.allSatisfy { whitespaces.contains($0) }}
       .map { try decoder.decode(type, from: $0) }
   }
 
@@ -109,7 +119,9 @@ public class NDJSONDecoder {
       while !data.isEmpty || stream.hasBytesAvailable {
         if let index = data.firstIndex(of: .newline) {
           do {
-            continuation.yield(try decoder.decode(type, from: data[..<index]))
+            if !ignoreEmptyLines || !data[..<index].allSatisfy({ whitespaces.contains($0) }) {
+              continuation.yield(try decoder.decode(type, from: data[..<index]))
+            }
             data.removeSubrange(...index)
             continue
           } catch {
@@ -134,7 +146,9 @@ public class NDJSONDecoder {
       }
 
       do {
-        continuation.yield(try decoder.decode(type, from: data))
+        if !ignoreEmptyLines || !data.allSatisfy({ whitespaces.contains($0) }) {
+          continuation.yield(try decoder.decode(type, from: data))
+        }
         data.removeAll()
       } catch {
         continuation.finish(throwing: error)
@@ -147,5 +161,8 @@ public class NDJSONDecoder {
 }
 
 extension UInt8 {
+  static let horizontalTab: UInt8 = 0x09
   static let newline: UInt8 = 0x0A
+  static let carriageReturn: UInt8 = 0x0D
+  static let space: UInt8 = 0x20
 }
