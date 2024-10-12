@@ -5,7 +5,7 @@ public enum StreamError: Error {
   case noBytesAvailable
 }
 
-public class NDJSONEncoder {
+public struct NDJSONEncoder: Sendable {
   public typealias KeyEncodingStrategy = JSONEncoder.KeyEncodingStrategy
   public typealias DateEncodingStrategy = JSONEncoder.DateEncodingStrategy
   public typealias DataEncodingStrategy = JSONEncoder.DataEncodingStrategy
@@ -45,7 +45,7 @@ public class NDJSONEncoder {
   }
 }
 
-public class NDJSONDecoder {
+public struct NDJSONDecoder: Sendable {
   public typealias KeyDecodingStrategy = JSONDecoder.KeyDecodingStrategy
   public typealias DateDecodingStrategy = JSONDecoder.DateDecodingStrategy
   public typealias DataDecodingStrategy = JSONDecoder.DataDecodingStrategy
@@ -166,3 +166,9 @@ extension UInt8 {
   static let carriageReturn: UInt8 = 0x0D
   static let space: UInt8 = 0x20
 }
+
+#if compiler(>=6.0)
+extension InputStream: @retroactive @unchecked Sendable {}
+#else
+extension InputStream: @unchecked Sendable {}
+#endif

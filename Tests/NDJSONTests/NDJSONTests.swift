@@ -31,7 +31,7 @@ final class NDJSONDecoderTests: XCTestCase {
   }
 
   func testDecodeValuesContainingEmptyLines() throws {
-    let decoder = NDJSONDecoder()
+    var decoder = NDJSONDecoder()
     decoder.ignoreEmptyLines = true
     let data = """
 
@@ -60,7 +60,7 @@ final class NDJSONDecoderTests: XCTestCase {
   }
 
   func testDecodeValuesContainingEmptyLinesAsynchronously() async throws {
-    let decoder = NDJSONDecoder()
+    var decoder = NDJSONDecoder()
     decoder.ignoreEmptyLines = true
     let data = """
 
