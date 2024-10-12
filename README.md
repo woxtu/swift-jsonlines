@@ -1,20 +1,20 @@
-# swift-ndjson
+# swift-jsonlines
 
 [![Swift Package Manager](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg?style=flat-square)](https://github.com/apple/swift-package-manager)
 
-A Swift implementation of [NDJSON (Newline Delimited JSON)](http://ndjson.org/) encoding/decoding.
+A Swift implementation of [JSON Lines](https://jsonlines.org/) encoding/decoding.
 
 ```swift
-import NDJSON
+import JSONLines
 
 // Encode
-try NDJSONEncoder().encode(sequence)
+try JSONLinesEncoder().encode(sequence)
 
 // Decode
-try NDJSONDecoder().decode(Value.self, from: data)
+try JSONLinesDecoder().decode(Value.self, from: data)
 
 // Decode asynchronously
-for try await value in NDJSONDecoder().stream(Value.self, from: inputStream) {
+for try await value in JSONLinesDecoder().stream(Value.self, from: inputStream) {
   ...
 }
 ```
@@ -24,7 +24,7 @@ for try await value in NDJSONDecoder().stream(Value.self, from: inputStream) {
 ### Swift Package Manager
 
 ```swift
-.package(url: "https://github.com/woxtu/swift-ndjson.git", from: "1.0.0")
+.package(url: "https://github.com/woxtu/swift-jsonlines.git", from: "1.0.0")
 ```
 
 ## License

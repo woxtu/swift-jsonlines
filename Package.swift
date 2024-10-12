@@ -3,12 +3,12 @@
 import PackageDescription
 
 let package = Package(
-  name: "swift-ndjson",
+  name: "swift-jsonlines",
   products: [
-    .library(name: "NDJSON", targets: ["NDJSON"]),
+    .library(name: "JSONLines", targets: ["JSONLines"])
   ],
   targets: [
-    .target(name: "NDJSON"),
-    .testTarget(name: "NDJSONTests", dependencies: ["NDJSON"]),
+    .target(name: "JSONLines"),
+    .testTarget(name: "JSONLinesTests", dependencies: ["JSONLines"]),
   ]
 )

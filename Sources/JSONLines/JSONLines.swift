@@ -1,11 +1,6 @@
 import Foundation
 
-public enum StreamError: Error {
-  case unavailable(Error?)
-  case noBytesAvailable
-}
-
-public struct NDJSONEncoder: Sendable {
+public struct JSONLinesEncoder: Sendable {
   public typealias KeyEncodingStrategy = JSONEncoder.KeyEncodingStrategy
   public typealias DateEncodingStrategy = JSONEncoder.DateEncodingStrategy
   public typealias DataEncodingStrategy = JSONEncoder.DataEncodingStrategy
@@ -45,7 +40,7 @@ public struct NDJSONEncoder: Sendable {
   }
 }
 
-public struct NDJSONDecoder: Sendable {
+public struct JSONLinesDecoder: Sendable {
   public typealias KeyDecodingStrategy = JSONDecoder.KeyDecodingStrategy
   public typealias DateDecodingStrategy = JSONDecoder.DateDecodingStrategy
   public typealias DataDecodingStrategy = JSONDecoder.DataDecodingStrategy
@@ -157,6 +152,11 @@ public struct NDJSONDecoder: Sendable {
 
       continuation.finish()
     }
+  }
+
+  public enum StreamError: Error {
+    case unavailable(Error?)
+    case noBytesAvailable
   }
 }
 

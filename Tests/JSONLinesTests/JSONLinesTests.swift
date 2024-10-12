@@ -1,10 +1,10 @@
 import XCTest
 
-@testable import NDJSON
+@testable import JSONLines
 
-final class NDJSONEncoderTests: XCTestCase {
+final class JSONLinesEncoderTests: XCTestCase {
   func testEncodeValues() throws {
-    let encoder = NDJSONEncoder()
+    let encoder = JSONLinesEncoder()
     XCTAssertEqual(
       try encoder.encode([0, 1, 2]),
       """
@@ -16,9 +16,9 @@ final class NDJSONEncoderTests: XCTestCase {
   }
 }
 
-final class NDJSONDecoderTests: XCTestCase {
+final class JSONLinesDecoderTests: XCTestCase {
   func testDecodeValues() throws {
-    let decoder = NDJSONDecoder()
+    let decoder = JSONLinesDecoder()
     let data = """
         0
         1
@@ -31,7 +31,7 @@ final class NDJSONDecoderTests: XCTestCase {
   }
 
   func testDecodeValuesContainingEmptyLines() throws {
-    var decoder = NDJSONDecoder()
+    var decoder = JSONLinesDecoder()
     decoder.ignoreEmptyLines = true
     let data = """
 
@@ -49,7 +49,7 @@ final class NDJSONDecoderTests: XCTestCase {
   }
 
   func testDecodeValuesAsynchronously() async throws {
-    let decoder = NDJSONDecoder()
+    let decoder = JSONLinesDecoder()
     let data = """
         0
         1
@@ -60,7 +60,7 @@ final class NDJSONDecoderTests: XCTestCase {
   }
 
   func testDecodeValuesContainingEmptyLinesAsynchronously() async throws {
-    var decoder = NDJSONDecoder()
+    var decoder = JSONLinesDecoder()
     decoder.ignoreEmptyLines = true
     let data = """
 
