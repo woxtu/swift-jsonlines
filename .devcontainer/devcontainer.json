@@ -4,8 +4,11 @@
     "context": "..",
     "dockerfile": "Dockerfile"
   },
-  "extensions": [
-    "sswg.swift-lang",
-    "vknabel.vscode-swiftformat"
-  ]
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "sswg.swift-lang"
+      ]
+    }
+  }
 }
