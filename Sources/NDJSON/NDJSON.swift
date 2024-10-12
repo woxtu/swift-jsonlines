@@ -41,7 +41,7 @@ public class NDJSONEncoder {
   public init() {}
 
   public func encode<S>(_ sequence: S) throws -> Data where S: Sequence, S.Element: Encodable {
-    return Data(try sequence.map { try encoder.encode($0) }.joined(separator: [.newline]))
+    .init(try sequence.map { try encoder.encode($0) }.joined(separator: [.newline]))
   }
 }
 
@@ -92,15 +92,15 @@ public class NDJSONDecoder {
   public init() {}
 
   public func decode<T>(_ type: T.Type, from data: Data) throws -> [T] where T: Decodable {
-    return try data
+    try data
       .split(separator: .newline, omittingEmptySubsequences: ignoreEmptyLines)
-      .filter { data in !ignoreEmptyLines || !data.allSatisfy { whitespaces.contains($0) }}
+      .filter { data in !ignoreEmptyLines || !data.allSatisfy { whitespaces.contains($0) } }
       .map { try decoder.decode(type, from: $0) }
   }
 
-  @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0,*)
+  @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
   public func stream<T>(_ type: T.Type, from stream: InputStream) -> AsyncThrowingStream<T, Error> where T: Decodable {
-    return AsyncThrowingStream { continuation in
+    .init { continuation in
       if stream.streamStatus == .notOpen {
         stream.open()
       }
